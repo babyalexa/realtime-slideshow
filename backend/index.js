@@ -1,49 +1,61 @@
 const app = require('express')()
 const http = require('http').Server(app)
 const io = require('socket.io')(http)
-const axios = require('axios')
 const port = process.env.PORT || 3000
 const cors = require('cors')
 
-
-// imagesnya pake api aja 
-
-
-async function getImage() {
-    // 1492574-117623e116bf86c1dfa9e17b8
-    const image = await axios.get('https://pixabay.com/api/?key=1492574-117623e116bf86c1dfa9e17b8&q=yellow+flowers&image_type=photo')
-    return image.hits[0]
-}
-
-
 const images = [
-    {
-        name: 'Image Name',
-        imageURL: 'https://images.unsplash.com/photo-1545401792-fc780684d94b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80'
-    }
+  {
+    url:
+      'https://images.unsplash.com/photo-1545450659-8f9ecd13559d?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=900&ixid=eyJhcHBfaWQiOjF9&ixlib=rb-1.2.1&q=80&w=1600'
+  },
+  {
+    url:
+      'https://images.unsplash.com/photo-1581814879111-b2e6a6bd5d18?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=900&ixlib=rb-1.2.1&q=80&w=1600'
+  },
+  {
+    url:
+      'https://images.unsplash.com/photo-1581891528608-ee7658131327?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=900&ixlib=rb-1.2.1&q=80&w=1600'
+  },
+  {
+    url:
+      'https://images.unsplash.com/photo-1581529666870-2121844fa0da?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=900&ixlib=rb-1.2.1&q=80&w=1600'
+  },
+  {
+    url:
+      'https://images.unsplash.com/photo-1579802655076-f5703b2f2aba?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=900&ixlib=rb-1.2.1&q=80&w=1600'
+  },
+  {
+    url:
+      'https://images.unsplash.com/photo-1579722364524-7bb42661d4b0?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=900&ixlib=rb-1.2.1&q=80&w=1600'
+  },
+  {
+    url:
+      'https://images.unsplash.com/photo-1579619312739-8d373e647330?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=900&ixlib=rb-1.2.1&q=80&w=1600'
+  },
+  {
+    url:
+      'https://images.unsplash.com/photo-1580206699674-022d394da0c1?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=900&ixlib=rb-1.2.1&q=80&w=1600'
+  },
+  {
+    url:
+      'https://images.unsplash.com/photo-1580219125213-8fca3cdcb885?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=900&ixlib=rb-1.2.1&q=80&w=1600'
+  },
+  {
+    url:
+      'https://images.unsplash.com/photo-1580029402599-3767ef474e4d?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=900&ixlib=rb-1.2.1&q=80&w=1600'
+  }
 ]
 
 app.use(cors())
 
-app.get('/', function(req, res) {
-  res.sendFile(__dirname + '/index.html')
-})
-
 io.on('connection', function(socket) {
-  console.log('Connected')
-  io.emit('change image', images[0])
+  io.emit('change image', images[Math.floor(Math.random() * 10)])
   socket.on('change image', function(msg) {
-      console.log('Change request well received!')
-    io.emit('change image', images[0])
+    io.emit('change image', images[Math.floor(Math.random() * 10)])
   })
-
 })
 
 http.listen(port, function() {
   console.log('listening on *:' + port)
 })
-
-
-// buat algoritma untuk tampilkan gambar
-// ketika connect kasih state gambar saat ini,
-// ketika click next atau back ganti state gambar saat ini terus io.emit
